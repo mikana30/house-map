@@ -82,11 +82,11 @@
       "id": "tstat-upstairs",
       "layer": "climate",
       "name": "Thermostat: upstairs",
-      "floor": null,
-      "x": null,
-      "y": null,
+      "floor": "second",
+      "x": 768,
+      "y": 407,
       "photo": null,
-      "notes": "Honeywell T5 (Resideo / First Alert app), also scheduled by Home Assistant. Wall location not recorded yet.",
+      "notes": "On the wall in the Primary Bedroom on the second floor. Honeywell T5 smart thermostat. Since November 2026 it has used the Resideo Connect (First Alert) app. Home Assistant runs its schedule. Which HVAC unit it controls: not recorded yet.",
       "directory": []
     },
     {
