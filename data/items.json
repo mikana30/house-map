@@ -159,11 +159,11 @@
       "id": "internet-modem-altafiber-168b",
       "layer": "utility",
       "name": "Internet modem (Altafiber)",
-      "floor": "basement",
-      "x": 623,
-      "y": 444,
+      "floor": "second",
+      "x": 973,
+      "y": 459,
       "photo": null,
-      "notes": "Altafiber fiber internet modem, in the basement. Fiber service (Fioptics) was installed on September 17, 2026, and replaced Spectrum cable. Modem brand and model: not recorded yet. The home router plugs into this modem.",
+      "notes": "Altafiber fiber internet modem, in the Unfinished Attic on the second floor. Fiber service (Fioptics) was installed on September 17, 2026. Modem brand and model: not recorded yet.",
       "directory": []
     }
   ]
