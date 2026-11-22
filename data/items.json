@@ -71,11 +71,11 @@
       "id": "tstat-main",
       "layer": "climate",
       "name": "Thermostat: main floor",
-      "floor": null,
-      "x": null,
-      "y": null,
+      "floor": "main",
+      "x": 779,
+      "y": 452,
       "photo": null,
-      "notes": "Honeywell T5 (Resideo / First Alert app), also scheduled by Home Assistant. Wall location not recorded yet.",
+      "notes": "On the wall in the Pantry on the main floor. Honeywell T5 smart thermostat. Since November 2026 it has used the Resideo Connect (First Alert) app, and Home Assistant also runs its schedule. Brand of the HVAC unit it controls: not recorded yet.",
       "directory": []
     },
     {
