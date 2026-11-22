@@ -1,0 +1,31 @@
+{
+  "_readme": "One entry per thing that stays with the house. floor: main | second | basement. x,y: position in floor-plan units (same as img/floorplan/*.py, 15.27 units per foot); leave both null if the spot isn't known yet. photo: path under img/items/. directory: rows typed from a panel's door label. Alarm/security items are deliberately NOT kept on this public page.",
+  "layers": [
+    {"id": "utility", "name": "Utility panels & equipment", "color": "#d35400"},
+    {"id": "water",   "name": "Water shutoffs",             "color": "#1f78b4"},
+    {"id": "climate", "name": "Heating & cooling",          "color": "#c0392b"},
+    {"id": "smart",   "name": "Smart switches & devices",   "color": "#7a4fb5"}
+  ],
+  "items": [
+    {"id": "breaker-panel", "layer": "utility", "name": "Main breaker panel", "floor": null, "x": null, "y": null,
+     "photo": null, "notes": "Square D Homeline. Location not recorded yet. Floor-heat circuits have no GFCI breakers yet (planned).", "directory": []},
+    {"id": "mech-room", "layer": "utility", "name": "Mechanical room", "floor": "basement", "x": 771, "y": 600,
+     "photo": null, "notes": "Long narrow room, about 5½ × 15 ft, between the playroom and the bath. Doors from the playroom. Equipment inside: not recorded yet.", "directory": []},
+    {"id": "water-main", "layer": "water", "name": "Main water shutoff", "floor": null, "x": null, "y": null,
+     "photo": null, "notes": "Location not recorded yet.", "directory": []},
+    {"id": "hvac-upstairs", "layer": "climate", "name": "Upstairs HVAC unit", "floor": "second", "x": 960, "y": 565,
+     "photo": null, "notes": "In the closet on the west wall of the office over the garage, just south of the entry. Brand/model: not recorded yet.", "directory": []},
+    {"id": "tstat-main", "layer": "climate", "name": "Thermostat: main floor", "floor": null, "x": null, "y": null,
+     "photo": null, "notes": "Honeywell T5 (Resideo / First Alert app), also scheduled by Home Assistant. Wall location not recorded yet.", "directory": []},
+    {"id": "tstat-upstairs", "layer": "climate", "name": "Thermostat: upstairs", "floor": null, "x": null, "y": null,
+     "photo": null, "notes": "Honeywell T5 (Resideo / First Alert app), also scheduled by Home Assistant. Wall location not recorded yet.", "directory": []},
+    {"id": "floorheat-1", "layer": "smart", "name": "Floor heat control, zone 1", "floor": null, "x": null, "y": null,
+     "photo": null, "notes": "SunTouch FloorStat 500600-120 (original, display dead). Planned replacement: Shelly 1PM Gen4 UL. Room not recorded yet. Wiring: see Heated floors section.", "directory": []},
+    {"id": "floorheat-2", "layer": "smart", "name": "Floor heat control, zone 2", "floor": null, "x": null, "y": null,
+     "photo": null, "notes": "SunTouch FloorStat 500600-120 (original, display dead). Planned replacement: Shelly 1PM Gen4 UL. Room not recorded yet.", "directory": []},
+    {"id": "floorheat-3", "layer": "smart", "name": "Floor heat control, zone 3", "floor": null, "x": null, "y": null,
+     "photo": null, "notes": "SunTouch FloorStat 500600-120 (original, display dead). Planned replacement: Shelly 1PM Gen4 UL. Room not recorded yet.", "directory": []},
+    {"id": "floorheat-4", "layer": "smart", "name": "Floor heat control, zone 4", "floor": null, "x": null, "y": null,
+     "photo": null, "notes": "SunTouch FloorStat 500600-120 (original, display dead). Planned replacement: Shelly 1PM Gen4 UL. Room not recorded yet.", "directory": []}
+  ]
+}

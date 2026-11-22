@@ -30,6 +30,26 @@
   ol li, ul li { margin:4px 0; }
   footer { margin-top:48px; padding-top:16px; padding-bottom:32px; border-top:1px solid var(--line); color:var(--muted); font-size:15px; }
   @media print { nav { display:none; } body { font-size:12pt; } h2 { page-break-after:avoid; } figure, table { page-break-inside:avoid; } a { color:inherit; text-decoration:none; } }
+
+  .hm-controls { position:sticky; top:0; z-index:5; background:var(--bg); padding:10px 0; border-bottom:1px solid var(--line); }
+  #hm-legend { display:flex; flex-wrap:wrap; gap:8px 20px; }
+  .hm-layer { display:flex; align-items:center; gap:6px; font-weight:600; cursor:pointer; min-height:32px; }
+  .hm-layer input { width:20px; height:20px; }
+  .hm-dot { display:inline-block; width:14px; height:14px; border-radius:50%; }
+  #hm-unplaced ul { list-style:none; padding:0; margin:4px 0 0; display:flex; flex-wrap:wrap; gap:6px; }
+  .hm-link { font:inherit; font-size:15px; background:var(--panel); border:1px solid var(--line); border-left:5px solid #888; border-radius:6px; padding:5px 10px; cursor:pointer; }
+  .hm-sub { margin:8px 0 0; color:var(--muted); font-size:15px; }
+  #hm-floors { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 640px), 1fr)); gap:18px; }
+  .hm-floor { margin:14px 0 0; } .hm-floor h3 { margin:0 0 4px; }
+  .hm-floor svg { width:100%; height:auto; border:1px solid var(--line); background:#fff; }
+  .hm-marker { cursor:pointer; } .hm-marker:focus { outline:none; } .hm-marker:focus circle:last-of-type { stroke:#000; }
+  #hm-detail { position:fixed; right:16px; bottom:16px; width:min(420px, calc(100vw - 32px)); max-height:75vh; overflow:auto; background:#fff; border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 30px rgba(0,0,0,.25); padding:16px 18px; z-index:20; }
+  #hm-detail h3 { margin:2px 0 4px; } #hm-detail img { width:100%; height:auto; border-radius:6px; margin:8px 0; }
+  .hm-kicker { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+  .hm-where { color:var(--muted); margin:0 0 6px; }
+  .hm-close { position:absolute; top:8px; right:10px; font-size:28px; line-height:1; background:none; border:0; cursor:pointer; padding:4px 8px; }
+  .hm-dir { font-size:14px; }
+  @media print { .hm-controls, #hm-detail { display:none !important; } }
 </style>
 </head>
 <body>
@@ -56,14 +76,18 @@
 
 <section id="floorplans">
   <h2>Floor plans</h2>
-  <p>Outside walls traced to scale from the Greene County auditor's building sketch; rooms from the owner's walk-through, the robot vacuum's map and listing photos. North is up; the front of the house (road side) faces south. Room positions are approximate and still being corrected.</p>
-  <h3>Main floor</h3>
-  <figure><img src="img/floorplan/main-rooms.png?v=202611220009" alt="Main floor room plan: office in the southwest turret with a coat closet north of it, foyer open to the second floor, sitting room east of the foyer, pantry and walkway north of the sitting room, stairs up (open to the vaulted family room) and stairs down to the basement behind a door, kitchen with breakfast nook bay, laundry, back hall, bath and a bedroom on the east side next to the garage, wraparound porch."><figcaption>Main floor.</figcaption></figure>
-  <h3>Second floor</h3>
-  <figure><img src="img/floorplan/second-rooms.png?v=202611220009" alt="Second floor room plan: U-shaped stairs arrive at a hall overlooking the family room; a bedroom over the office turret, the open foyer and a second bedroom on the south side; hall bath, linen closet and the primary bedroom with an angled walk-in closet on the north side; primary bath over the breakfast nook bay; balcony off the primary bedroom; short hall into an office over the garage with an HVAC closet and a small door to the unfinished attic."><figcaption>Second floor.</figcaption></figure>
-  <h3>Basement</h3>
-  <figure><img src="img/floorplan/basement-rooms.png?v=202611220009" alt="Basement room plan: stairs arrive facing an open room with a support post; rec room with fireplace and glass doors to the west walkout; kitchen alcove under the breakfast nook; dining area; theater under the main-floor bedroom with a wiring closet; bath under the main-floor bath; mechanical room; playroom along the south wall with a built-in bunk and closet; turret room under the office reached through the room under the stairs and a hidden bookshelf door."><figcaption>Basement. Finished walkout; no basement under the garage.</figcaption></figure>
-  <p class="sub">Source: <a href="img/floorplan/auditor-sketch.png">county auditor sketch</a> (all floors drawn on top of each other).</p>
+  <p>Outside walls traced to scale from the Greene County auditor's building sketch; rooms from the owner's walk-through, the robot vacuum's map and listing photos. North is up; the front of the house (road side) faces south. Room positions are approximate and still being corrected. Tick a layer to light those things up on the plans; tap a marker for its photo and notes.</p>
+  <div id="hm-app" data-v="202611220018">
+    <div class="hm-controls"><div id="hm-legend"></div><div id="hm-unplaced"></div></div>
+    <div id="hm-floors"><p>Loading the plans…</p></div>
+    <div id="hm-detail" hidden tabindex="-1"></div>
+  </div>
+  <noscript>
+    <h3>Main floor</h3><figure><img src="img/floorplan/main-rooms.png?v=202611220018" alt="Main floor room plan."></figure>
+    <h3>Second floor</h3><figure><img src="img/floorplan/second-rooms.png?v=202611220018" alt="Second floor room plan."></figure>
+    <h3>Basement</h3><figure><img src="img/floorplan/basement-rooms.png?v=202611220018" alt="Basement room plan."></figure>
+  </noscript>
+  <p class="sub">Source: <a href="img/floorplan/auditor-sketch.png">county auditor sketch</a> (all floors drawn on top of each other). Printable plans: <a href="img/floorplan/main-rooms.png?v=202611220018">main</a> · <a href="img/floorplan/second-rooms.png?v=202611220018">second</a> · <a href="img/floorplan/basement-rooms.png?v=202611220018">basement</a>.</p>
 </section>
 
 <section id="panel">
@@ -111,7 +135,7 @@
   </ul>
 
   <figure>
-    <img src="img/floor-heat-shelly-wiring.png?v=202611220009" alt="Wiring diagram: panel black to L, heater lead 1 to O, panel white plus heater lead 2 plus a jumper to N joined in wire nut 1, panel bare copper plus heater ground braid in wire nut 2, SW empty, floor sensor capped.">
+    <img src="img/floor-heat-shelly-wiring.png?v=202611220018" alt="Wiring diagram: panel black to L, heater lead 1 to O, panel white plus heater lead 2 plus a jumper to N joined in wire nut 1, panel bare copper plus heater ground braid in wire nut 2, SW empty, floor sensor capped.">
     <figcaption>Floor heat zone wired to a Shelly 1PM Gen4 UL (120 V).</figcaption>
   </figure>
 
@@ -147,6 +171,7 @@
 <section id="changes">
   <h2>Change log</h2>
   <ul>
+    <li><strong>2026-11-22</strong>: Interactive plans: layer legend, clickable markers with photo and notes (data in data/items.json).</li>
     <li><strong>2026-11-22</strong>: Floor plans trimmed to one image per floor (main, second, basement). Basement bath moved under the main-floor bath.</li>
     <li><strong>2026-11-22</strong>: Basement room plan added from walk-through.</li>
     <li><strong>2026-11-21</strong>: Second floor adjusted from listing photos: angled walk-in closet inside the primary bedroom door, glass double doors to the balcony beside the primary bath doorway, HVAC closet on the office's west wall, gable window at the office's south end, U-shaped stairs.</li>
@@ -162,5 +187,6 @@
 <footer>
   Things that move with the owner (plugs, routers, sensors, test equipment) are deliberately not listed. No passwords or network details are kept on this page.
 </footer>
+<script src="assets/map.js?v=202611220018"></script>
 </body>
 </html>
