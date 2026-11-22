@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>House Wiring Map</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { --ink:#1b1f24; --muted:#5a6470; --line:#d6dbe1; --bg:#ffffff; --panel:#f5f7f9; --accent:#0b5cad; --warn-bg:#fff6dc; --warn-line:#e0a800; --plan:#7a4fb5; --live:#1f7a3a; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header, main, footer { padding:0 clamp(16px, 3vw, 48px); }
+  header { padding-top:28px; padding-bottom:12px; border-bottom:3px solid var(--ink); }
+  h1 { margin:0 0 4px; font-size:clamp(26px, 4vw, 38px); }
+  .sub { color:var(--muted); margin:0; }
+  nav { display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:14px; }
+  nav a { color:var(--accent); font-weight:600; text-decoration:none; }
+  h2 { margin:40px 0 8px; font-size:26px; border-bottom:1px solid var(--line); padding-bottom:6px; }
+  h3 { margin:26px 0 6px; font-size:20px; }
+  .warn { background:var(--warn-bg); border-left:6px solid var(--warn-line); padding:12px 16px; margin:16px 0; }
+  .note { background:var(--panel); border-left:6px solid var(--line); padding:12px 16px; margin:16px 0; }
+  table { width:100%; border-collapse:collapse; margin:10px 0 6px; font-size:16px; }
+  th, td { text-align:left; vertical-align:top; padding:9px 10px; border-bottom:1px solid var(--line); }
+  th { background:var(--panel); font-size:14px; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); }
+  .tbl { overflow-x:auto; }
+  .tag { display:inline-block; font-size:13px; font-weight:700; padding:1px 8px; border-radius:10px; color:#fff; white-space:nowrap; }
+  .tag.live { background:var(--live); } .tag.plan { background:var(--plan); } .tag.unk { background:#8a939c; }
+  figure { margin:14px 0; } figure img { width:100%; max-width:1400px; height:auto; border:1px solid var(--line); }
+  figcaption { color:var(--muted); font-size:15px; }
+  ol li, ul li { margin:4px 0; }
+  footer { margin-top:48px; padding-top:16px; padding-bottom:32px; border-top:1px solid var(--line); color:var(--muted); font-size:15px; }
+  @media print { nav { display:none; } body { font-size:12pt; } h2 { page-break-after:avoid; } figure, table { page-break-inside:avoid; } a { color:inherit; text-decoration:none; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>House Wiring &amp; Smart Devices Map</h1>
+  <p class="sub">Everything wired into this house that is "smart" or confusing: what it is, where it is, what it controls, and how it's wired. Only things that stay with the house are listed. <strong>Last updated: 2026-11-21.</strong></p>
+  <nav>
+    <a href="#safety">Safety first</a>
+    <a href="#panel">Breaker panel &amp; circuits</a>
+    <a href="#floor-heat">Heated floors</a>
+    <a href="#thermostats">Thermostats</a>
+    <a href="#changes">Change log</a>
+  </nav>
+</header>
+<main>
+
+<section id="safety">
+  <h2>Safety first</h2>
+  <div class="warn">
+    <strong>Turn the breaker off and check the wires are dead with a tester before you touch anything.</strong> Smart switches in the wall carry full 120 V even when the thing they control is off.
+  </div>
+</section>
+
+<section id="panel">
+  <h2>Breaker panel &amp; circuits</h2>
+  <p><strong>Panel:</strong> Square D Homeline.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Breaker #</th><th>Amps</th><th>What it feeds</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Not recorded yet</td><td>Not recorded yet</td><td>Heated floors (4 zones)</td><td>No GFCI breakers on these circuits today; the old floor thermostats have GFCI built in. Plan: add one Homeline GFCI breaker per floor-heat circuit <em>before</em> any old thermostat is replaced. <span class="tag plan">PLANNED</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Confusing circuits will be traced and explained here: which breaker feeds what, and anything that doesn't match the panel label.</div>
+</section>
+
+<section id="floor-heat">
+  <h2>Heated floors</h2>
+  <p>Electric heating mats under the tile, 4 zones, each run from a wall control in a single-gang box. The floors only need to be warm at set times, so room temperature doesn't matter.</p>
+
+  <h3>Zones</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Zone</th><th>Room</th><th>Wall control now</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Not recorded yet</td><td>SunTouch FloorStat 500600-120 (original)</td><td><span class="tag unk">ORIGINAL</span> Display dead</td></tr>
+      <tr><td>2</td><td>Not recorded yet</td><td>SunTouch FloorStat 500600-120 (original)</td><td><span class="tag unk">ORIGINAL</span> Display dead</td></tr>
+      <tr><td>3</td><td>Not recorded yet</td><td>SunTouch FloorStat 500600-120 (original)</td><td><span class="tag unk">ORIGINAL</span> Display dead</td></tr>
+      <tr><td>4</td><td>Not recorded yet</td><td>SunTouch FloorStat 500600-120 (original)</td><td><span class="tag unk">ORIGINAL</span> Display dead</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Original control: SunTouch FloorStat 500600-120</h3>
+  <ul>
+    <li>Programmable floor thermostat, 120 VAC, 2000 W max, GFCI built in.</li>
+    <li>Reads a floor temperature sensor (thin wire pair) buried in the floor.</li>
+    <li>The displays are dead, so they can't be set. They're being replaced one at a time.</li>
+  </ul>
+
+  <h3>Replacement: Shelly 1PM Gen4 UL <span class="tag plan">PLANNED</span></h3>
+  <ul>
+    <li>Small smart relay that fits in the same wall box behind a blank cover plate. Rated 15 A. Measures power.</li>
+    <li>Turned on and off by Home Assistant on a schedule (or the Shelly app, or the small button on the device).</li>
+    <li>Has <strong>no GFCI</strong>, so the circuit's GFCI breaker must be installed first.</li>
+    <li>Terminals, left to right: <strong>O, SW, L, L, L, N, N</strong>. The three L screws are joined inside, and so are the two N screws: use one of each.</li>
+    <li><strong>L</strong> = incoming hot. <strong>N</strong> = neutral (powers the Shelly). <strong>O</strong> = switched hot out to the heater. <strong>SW</strong> = optional wall-switch input, left empty here.</li>
+    <li>The on/off relay is inside the Shelly, between L and O. The floor sensor is not used.</li>
+  </ul>
+
+  <figure>
+    <img src="img/floor-heat-shelly-wiring.png" alt="Wiring diagram: panel black to L, heater lead 1 to O, panel white plus heater lead 2 plus a jumper to N joined in wire nut 1, panel bare copper plus heater ground braid in wire nut 2, SW empty, floor sensor capped.">
+    <figcaption>Floor heat zone wired to a Shelly 1PM Gen4 UL (120 V).</figcaption>
+  </figure>
+
+  <h3>Wiring, by wire</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Wire</th><th>Goes to</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Black</strong> from panel (hot)</td><td>Shelly <strong>L</strong></td></tr>
+      <tr><td>Heater lead 1</td><td>Shelly <strong>O</strong></td></tr>
+      <tr><td><strong>White</strong> from panel (neutral)</td><td>Wire nut #1</td></tr>
+      <tr><td>Heater lead 2</td><td>Wire nut #1</td></tr>
+      <tr><td>Short white jumper</td><td>Wire nut #1 to Shelly <strong>N</strong></td></tr>
+      <tr><td><strong>Bare copper</strong> from panel</td><td>Wire nut #2</td></tr>
+      <tr><td>Heater ground braid / green</td><td>Wire nut #2 (the Shelly has no ground screw)</td></tr>
+      <tr><td>Floor sensor (thin pair)</td><td>Cap each wire; not used</td></tr>
+      <tr><td>Shelly SW</td><td>Nothing</td></tr>
+    </tbody>
+  </table></div>
+  <p>Heater lead colors vary. The heater pair is whichever two wires were on the old FloorStat's <strong>LOAD</strong> terminals; the panel pair was on <strong>LINE</strong>. Photograph the old wiring before removing it.</p>
+</section>
+
+<section id="thermostats">
+  <h2>Thermostats (heating &amp; cooling)</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Location</th><th>Model</th><th>App</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Main floor</td><td>Honeywell T5</td><td>Resideo / First Alert</td><td>Also run by Home Assistant schedules. <span class="tag live">INSTALLED</span></td></tr>
+      <tr><td>Upstairs</td><td>Honeywell T5</td><td>Resideo / First Alert</td><td>Also run by Home Assistant schedules. <span class="tag live">INSTALLED</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="changes">
+  <h2>Change log</h2>
+  <ul>
+    <li><strong>2026-11-21</strong>: Map started. Panel, heated floors (original controls + Shelly replacement plan and wiring), thermostats.</li>
+  </ul>
+</section>
+
+</main>
+<footer>
+  Things that move with the owner (plugs, routers, sensors, test equipment) are deliberately not listed. No passwords or network details are kept on this page.
+</footer>
+</body>
+</html>

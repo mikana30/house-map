@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" font-family="DejaVu Sans, Arial, sans-serif">
+  <rect width="1600" height="1100" fill="#ffffff"/>
+  <text x="800" y="70" text-anchor="middle" font-size="44" font-weight="bold" fill="#111">SHELLY 1PM GEN4 — FLOOR HEAT WIRING (120 V)</text>
+  <text x="800" y="112" text-anchor="middle" font-size="24" fill="#555">Replaces the FloorStat. Same box, blank cover plate.</text>
+
+  <!-- Panel cable -->
+  <rect x="20" y="490" width="110" height="140" rx="14" fill="#ddd" stroke="#888" stroke-width="3"/>
+  <text x="75" y="455" text-anchor="middle" font-size="24" font-weight="bold">FROM</text>
+  <text x="75" y="482" text-anchor="middle" font-size="24" font-weight="bold">PANEL</text>
+  <text x="75" y="660" text-anchor="middle" font-size="20" fill="#555">(was FloorStat</text>
+  <text x="75" y="684" text-anchor="middle" font-size="20" fill="#555">LINE)</text>
+
+  <!-- Heater cable -->
+  <rect x="1470" y="490" width="110" height="200" rx="14" fill="#ddd" stroke="#888" stroke-width="3"/>
+  <text x="1525" y="455" text-anchor="middle" font-size="24" font-weight="bold">TO FLOOR</text>
+  <text x="1525" y="482" text-anchor="middle" font-size="24" font-weight="bold">HEATER</text>
+  <text x="1525" y="720" text-anchor="middle" font-size="20" fill="#555">(was FloorStat</text>
+  <text x="1525" y="744" text-anchor="middle" font-size="20" fill="#555">LOAD)</text>
+
+  <!-- Shelly -->
+  <rect x="580" y="180" width="440" height="260" rx="22" fill="#f4f4f4" stroke="#333" stroke-width="4"/>
+  <text x="800" y="270" text-anchor="middle" font-size="40" font-weight="bold">SHELLY 1PM</text>
+  <text x="800" y="310" text-anchor="middle" font-size="22" fill="#555">Gen4 UL · 15 A max</text>
+  <g font-size="30" font-weight="bold" text-anchor="middle">
+    <circle cx="640" cy="410" r="16" fill="#999" stroke="#333" stroke-width="3"/><text x="640" y="375">L</text>
+    <circle cx="733" cy="410" r="16" fill="#999" stroke="#333" stroke-width="3"/><text x="733" y="375">N</text>
+    <circle cx="866" cy="410" r="16" fill="#999" stroke="#333" stroke-width="3"/><text x="866" y="375">O</text>
+    <circle cx="960" cy="410" r="16" fill="#999" stroke="#333" stroke-width="3"/><text x="960" y="375">SW</text>
+  </g>
+  <!-- SW unused -->
+  <text x="960" y="340" text-anchor="middle" font-size="22" font-weight="bold" fill="#c00">NOTHING</text>
+
+  <!-- BLACK hot: panel -> L -->
+  <path d="M130,520 H590 Q640,520 640,426" fill="none" stroke="#000" stroke-width="12"/>
+  <text x="300" y="505" font-size="24" font-weight="bold">BLACK (hot) → L</text>
+
+  <!-- WHITE neutral: panel -> nut 1 -->
+  <path d="M130,570 H330 Q440,570 470,770" fill="none" stroke="#333" stroke-width="15"/>
+  <path d="M130,570 H330 Q440,570 470,770" fill="none" stroke="#fff" stroke-width="10"/>
+  <text x="150" y="608" font-size="24" font-weight="bold">WHITE (neutral)</text>
+
+  <!-- WHITE jumper: nut 1 -> N -->
+  <path d="M500,770 C520,640 733,640 733,426" fill="none" stroke="#333" stroke-width="15"/>
+  <path d="M500,770 C520,640 733,640 733,426" fill="none" stroke="#fff" stroke-width="10"/>
+  <text x="745" y="560" font-size="22" font-weight="bold">short white</text>
+  <text x="745" y="586" font-size="22" font-weight="bold">jumper → N</text>
+
+  <!-- Heater lead 1: O -> heater -->
+  <path d="M866,426 C866,540 1300,530 1470,530" fill="none" stroke="#b5651d" stroke-width="12"/>
+  <text x="1060" y="505" font-size="24" font-weight="bold" fill="#8a4a10">HEATER LEAD 1 → O</text>
+
+  <!-- Heater lead 2: heater -> nut 1 -->
+  <path d="M1470,600 Q1380,600 1330,700 Q1290,820 1150,820 H560 Q505,820 492,795" fill="none" stroke="#6a3d9a" stroke-width="12"/>
+  <text x="640" y="806" font-size="24" font-weight="bold" fill="#4b2a70">HEATER LEAD 2 → wire nut #1</text>
+
+  <!-- Wire nut 1 -->
+  <path d="M455,760 L515,760 L500,820 L470,820 Z" fill="#f28c28" stroke="#a85500" stroke-width="3" transform="rotate(180 485 790)"/>
+  <text x="380" y="880" text-anchor="middle" font-size="24" font-weight="bold">WIRE NUT #1</text>
+  <text x="380" y="908" text-anchor="middle" font-size="20" fill="#333">panel white + heater lead 2</text>
+  <text x="380" y="932" text-anchor="middle" font-size="20" fill="#333">+ jumper to N</text>
+
+  <!-- Ground: panel bare copper -> nut 2 -->
+  <path d="M130,610 Q190,610 205,980" fill="none" stroke="#c87533" stroke-width="7"/>
+  <text x="20" y="760" font-size="22" font-weight="bold" fill="#8a4a10">BARE</text>
+  <text x="20" y="786" font-size="22" font-weight="bold" fill="#8a4a10">COPPER</text>
+  <!-- heater ground braid -> nut 2 -->
+  <path d="M1470,660 Q1440,660 1420,800 Q1400,990 1250,990 H240" fill="none" stroke="#c87533" stroke-width="10" stroke-dasharray="4 3"/>
+  <text x="700" y="975" font-size="24" font-weight="bold" fill="#8a4a10">HEATER GROUND BRAID → wire nut #2</text>
+  <!-- Wire nut 2 -->
+  <path d="M190,960 L250,960 L235,1020 L205,1020 Z" fill="#2e9e44" stroke="#1b6b2b" stroke-width="3" transform="rotate(-90 220 990)"/>
+  <text x="300" y="1050" font-size="24" font-weight="bold">WIRE NUT #2 (grounds) — Shelly has no ground screw</text>
+
+  <!-- Sensor -->
+  <line x1="980" y1="880" x2="1090" y2="880" stroke="#777" stroke-width="5"/>
+  <line x1="980" y1="900" x2="1090" y2="900" stroke="#777" stroke-width="5"/>
+  <circle cx="1095" cy="880" r="9" fill="#f2c200" stroke="#555"/><circle cx="1095" cy="900" r="9" fill="#f2c200" stroke="#555"/>
+  <text x="1120" y="888" font-size="22" font-weight="bold">FLOOR SENSOR:</text>
+  <text x="1120" y="914" font-size="22">cap each wire, unused</text>
+
+  <!-- Notes -->
+  <rect x="1060" y="150" width="520" height="190" rx="12" fill="#fff8e1" stroke="#e0a800" stroke-width="3"/>
+  <text x="1080" y="190" font-size="22" font-weight="bold">BEFORE YOU START</text>
+  <text x="1080" y="222" font-size="20">1. GFCI breaker installed, then breaker OFF</text>
+  <text x="1080" y="250" font-size="20">2. Photo + label wires on the old FloorStat</text>
+  <text x="1080" y="278" font-size="20">3. L has 3 screws, N has 2 (joined inside):</text>
+  <text x="1080" y="304" font-size="20">    use any ONE of each, leave the rest empty</text>
+  <text x="1080" y="330" font-size="20">4. Heater wire colors vary: use LOAD pair</text>
+</svg>
