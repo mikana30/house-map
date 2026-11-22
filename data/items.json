@@ -27,11 +27,11 @@
       "id": "breaker-panel",
       "layer": "utility",
       "name": "Main breaker panel",
-      "floor": null,
-      "x": null,
-      "y": null,
+      "floor": "basement",
+      "x": 1141,
+      "y": 128,
       "photo": null,
-      "notes": "Square D Homeline. Location not recorded yet. Floor-heat circuits have no GFCI breakers yet (planned).",
+      "notes": "Primary electric panel, in the basement. Square D Homeline load center. Breakers 17, 19, 21, 23, 25 and 27 are 20 A single-pole Homeline breakers (HOM120), and breaker 29 is 15 A. None of these is an AFCI or GFCI breaker. Floor-heat circuits: the owner said in November 2026 that GFCI breakers are already in the panel, but nobody has checked at the panel yet. If they are missing, the planned part is the Square D HOM120GFI (HOM115GFI for a 15 A circuit). Room within the basement: not recorded yet.",
       "directory": []
     },
     {
