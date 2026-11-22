@@ -132,6 +132,17 @@
       "photo": null,
       "notes": "SunTouch FloorStat 500600-120 (original, display dead). Planned replacement: Shelly 1PM Gen4 UL. Room not recorded yet.",
       "directory": []
+    },
+    {
+      "id": "electrical-sub-panel-b16f",
+      "layer": "utility",
+      "name": "Electrical sub-panel",
+      "floor": "basement",
+      "x": 1103,
+      "y": 171,
+      "photo": null,
+      "notes": "Electrical sub-panel in the basement theater. This is a separate panel from the main breaker panel. Brand, model, breaker sizes and the circuits it feeds: not recorded yet.",
+      "directory": []
     }
   ]
 }
