@@ -1,5 +1,5 @@
 {
-  "_readme": "One entry per thing that stays with the house. floor: main | second | basement. x,y: position in floor-plan units (same as img/floorplan/*.py, 15.27 units per foot); leave both null if the spot isn't known yet. photo: path under img/items/. directory: rows typed from a panel's door label. Alarm/security items are deliberately NOT kept on this public page.",
+  "_readme": "One entry per thing that stays with the house. floor: main | second | basement. x,y: position in floor-plan units (same as img/floorplan/*.py, 15.27 units per foot); leave both null if the spot isn't known yet. photo: path under img/items/. directory: rows typed from a panel's door label. Alarm/security items are NOT kept here in readable form: they live only in data/security.enc.json, encrypted in the browser with a password written inside the security panel door.",
   "layers": [
     {
       "id": "utility",

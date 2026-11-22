@@ -14,7 +14,33 @@
   if (!root) return;
   const ver = root.dataset.v || "";
   // pending: {kind:"new"} | {kind:"move", item} -- what the next tap on a plan does
-  const state = { data: null, on: new Set(), canEdit: false, editing: false, pending: null, draft: null, previews: {} };
+  const state = { data: null, on: new Set(), canEdit: false, editing: false, pending: null, draft: null, previews: {},
+    sec: { exists: false, blob: null, unlocked: false, key: null, salt: null, iter: 600000, items: [] } };
+  // Security layer: kept ENCRYPTED in data/security.enc.json (AES-GCM, key from the password by PBKDF2).
+  // The password is written inside the security panel's door, so only someone standing there can unlock it.
+  // The browser encrypts before anything is sent; the server and the public repo only ever see ciphertext.
+  const SEC = { id: "security", name: "Security system", color: "#222" };
+  const enc = new TextEncoder(), dec = new TextDecoder();
+  const b64 = (u8) => btoa(String.fromCharCode(...u8));
+  const unb64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+  async function deriveKey(pw, salt, iter) {
+    const base = await crypto.subtle.importKey("raw", enc.encode(pw), "PBKDF2", false, ["deriveKey"]);
+    return crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: iter, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+  }
+  async function unlockSec(pw) {
+    const b = state.sec.blob;
+    const salt = unb64(b.salt), key = await deriveKey(pw, salt, b.iter);
+    const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(b.iv) }, key, unb64(b.ct));   // throws on a wrong password
+    Object.assign(state.sec, { unlocked: true, key, salt, iter: b.iter, items: JSON.parse(dec.decode(pt)) });
+  }
+  async function saveSec() {
+    const s = state.sec, iv = crypto.getRandomValues(new Uint8Array(12));
+    const ct = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, s.key, enc.encode(JSON.stringify(s.items))));
+    const blob = { v: 1, kdf: "PBKDF2-SHA256", iter: s.iter, salt: b64(s.salt), iv: b64(iv), ct: b64(ct) };
+    await send({ action: "save_secure", blob });
+    s.blob = blob; s.exists = true;
+  }
+  function allItems() { return state.data.items.concat(state.sec.unlocked ? state.sec.items : []); }
 
   function el(tag, attrs, text) {
     const e = document.createElement(tag);
@@ -32,7 +58,7 @@
     return null;
   }
   function saveOn() {
-    try { localStorage.setItem("hm-layers", JSON.stringify([...state.on])); } catch (e) {}
+    try { localStorage.setItem("hm-layers", JSON.stringify([...state.on].filter((x) => x !== "security"))); } catch (e) {}
   }
   function roomAt(floor, x, y) {
     const rooms = (state.rooms || {})[floor] || [];
@@ -51,7 +77,7 @@
     const r = x != null ? roomAt(floor, x, y) : null;
     return floorName(floor) + (r ? " · " + r : "");
   }
-  function layer(id) { return state.data.layers.find((l) => l.id === id) || { name: id, color: "#555" }; }
+  function layer(id) { return id === SEC.id ? SEC : (state.data.layers.find((l) => l.id === id) || { name: id, color: "#555" }); }
   function floorName(id) { const f = FLOORS.find((x) => x.id === id); return f ? f.name : "Location not recorded yet"; }
   function panel() { return document.getElementById("hm-detail"); }
   function closePanel() { panel().hidden = true; state.draft = null; if (state.pending && state.pending.kind === "new") state.pending = null; render(); }
@@ -93,6 +119,50 @@
     }
     p.hidden = false;
     p.focus();
+  }
+
+  function showUnlock() {
+    const p = panel();
+    panelHeader(p, "Locked layer", SEC.color, "Security system");
+    p.appendChild(el("p", { class: "hm-note" }, "The password is written inside the security system's panel door. You need to be standing at the panel to read it."));
+    const f = el("form", { class: "hm-form" });
+    const pw = el("input", { type: "password", autocomplete: "off", required: "" });
+    const l = el("label", {}, "Password"); l.appendChild(pw); f.appendChild(l);
+    const msg = el("p", { class: "hm-msg", role: "status" });
+    const row = el("div", { class: "hm-row" }); row.appendChild(el("button", { type: "submit", class: "hm-btn hm-primary" }, "Unlock")); f.appendChild(row); f.appendChild(msg);
+    f.onsubmit = async (ev) => {
+      ev.preventDefault(); msg.textContent = "Checking…";
+      try { await unlockSec(pw.value); pw.value = ""; state.on.add(SEC.id); p.hidden = true; render(); }
+      catch (e) { msg.textContent = "That password didn't work."; }
+    };
+    p.appendChild(f); p.hidden = false; pw.focus();
+  }
+
+  function showSetup() {
+    const p = panel();
+    panelHeader(p, "Set up", SEC.color, "Security system layer");
+    p.appendChild(el("p", {}, "Choose a password for this layer. Everything on it is encrypted in this browser before it's saved; nobody can read it without the password, including the server."));
+    p.appendChild(el("p", { class: "hm-note" }, "Use a long passphrase (four or more random words). Write it on a label inside the security panel's door. If it's lost, the layer's contents can't be recovered."));
+    const f = el("form", { class: "hm-form" });
+    const a = el("input", { type: "password", autocomplete: "new-password", required: "", minlength: "12" });
+    const b = el("input", { type: "password", autocomplete: "new-password", required: "", minlength: "12" });
+    const la = el("label", {}, "Password (12+ characters)"); la.appendChild(a); f.appendChild(la);
+    const lb = el("label", {}, "Same password again"); lb.appendChild(b); f.appendChild(lb);
+    const msg = el("p", { class: "hm-msg", role: "status" });
+    const row = el("div", { class: "hm-row" }); row.appendChild(el("button", { type: "submit", class: "hm-btn hm-primary" }, "Create locked layer")); f.appendChild(row); f.appendChild(msg);
+    f.onsubmit = async (ev) => {
+      ev.preventDefault();
+      if (a.value !== b.value) { msg.textContent = "The two don't match."; return; }
+      msg.textContent = "Saving…";
+      try {
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        Object.assign(state.sec, { salt, iter: 600000, key: await deriveKey(a.value, salt, 600000), items: [], unlocked: true });
+        a.value = b.value = "";
+        await saveSec();
+        state.on.add(SEC.id); p.hidden = true; render();
+      } catch (e) { state.sec.unlocked = false; msg.textContent = e.message; }
+    };
+    p.appendChild(f); p.hidden = false; a.focus();
   }
 
   function shrink(file) {
@@ -160,7 +230,7 @@
     const name = el("input", { type: "text", required: "", maxlength: "80", placeholder: "e.g. Main breaker panel" });
     name.value = pf.name || (item ? item.name : "");
     const sel = el("select");
-    state.data.layers.forEach((L) => { const o = el("option", { value: L.id }, L.name); sel.appendChild(o); });
+    state.data.layers.concat(state.sec.unlocked ? [SEC] : []).forEach((L) => { const o = el("option", { value: L.id }, L.name); sel.appendChild(o); });
     sel.value = pf.layer || (item ? item.layer : (state.data.layers[0] || {}).id);
     const notes = el("textarea", { rows: "4", maxlength: "2000", placeholder: "Brand, model, what it controls, anything useful" });
     notes.value = pf.notes != null ? pf.notes : (item ? item.notes || "" : "");
@@ -184,8 +254,8 @@
         if (!armed) { armed = true; del.textContent = "Tap again to delete"; return; }
         del.disabled = true; msg.textContent = "Deleting…";
         try {
-          await send({ action: "delete", id: item.id });
-          state.data.items = state.data.items.filter((i) => i.id !== item.id);
+          if (item.layer === SEC.id) { state.sec.items = state.sec.items.filter((i) => i.id !== item.id); await saveSec(); }
+          else { await send({ action: "delete", id: item.id }); state.data.items = state.data.items.filter((i) => i.id !== item.id); }
           p.hidden = true; render();
         } catch (e) { msg.textContent = e.message; del.disabled = false; }
       };
@@ -197,10 +267,27 @@
       ev.preventDefault();
       saveB.disabled = true; msg.textContent = "Saving…";
       try {
-        const body = { action: isNew ? "add" : "update", id: item && item.id, name: name.value, layer: sel.value, notes: notes.value };
-        if ((isNew || opts.placeAt) && spot) Object.assign(body, { floor: spot.floor, x: spot.x, y: spot.y });
+        const wantSec = sel.value === SEC.id, wasSec = !!item && item.layer === SEC.id;
         let preview = null;
-        if (photo.files && photo.files[0]) { preview = await shrink(photo.files[0]); body.photo_b64 = preview; }
+        if (photo.files && photo.files[0]) preview = await shrink(photo.files[0]);
+        const where0 = (isNew || opts.placeAt) && spot ? { floor: spot.floor, x: spot.x, y: spot.y } : (item ? { floor: item.floor, x: item.x, y: item.y } : {});
+        if (wantSec) {
+          // encrypted path: photo travels inside the encrypted blob, never as a public file
+          let it = wasSec ? state.sec.items.find((i) => i.id === item.id) : null;
+          if (!it) { it = { id: "sec-" + Math.random().toString(36).slice(2, 8), directory: [], photo: null }; state.sec.items.push(it); }
+          Object.assign(it, { layer: SEC.id, name: name.value.trim(), notes: notes.value }, where0);
+          if (preview) it.photo = preview;
+          await saveSec();
+          if (item && !wasSec) { await send({ action: "delete", id: item.id }); state.data.items = state.data.items.filter((i) => i.id !== item.id); }
+          state.on.add(SEC.id); state.draft = null; state.pending = null;
+          render(); showForm(it);
+          const m3 = panel().querySelector(".hm-msg"); if (m3) m3.textContent = "Saved to the locked layer (encrypted).";
+          return;
+        }
+        if (wasSec) { state.sec.items = state.sec.items.filter((i) => i.id !== item.id); await saveSec(); }
+        const body = { action: (isNew || wasSec) ? "add" : "update", id: item && !wasSec ? item.id : undefined, name: name.value, layer: sel.value, notes: notes.value };
+        if (isNew || opts.placeAt || wasSec) Object.assign(body, where0);
+        if (preview) body.photo_b64 = preview;
         const j = await send(body);
         if (preview) state.previews[j.item.id] = preview;   // live page catches up after GitHub rebuilds (~1 min)
         const i = state.data.items.findIndex((x) => x.id === j.item.id);
@@ -226,10 +313,14 @@
       const item = state.pending.item;
       state.pending = null;
       try {
-        const j = await send({ action: "move", id: item.id, floor, x, y });
-        const i = state.data.items.findIndex((v) => v.id === item.id);
-        state.data.items[i] = j.item;
-        render(); showForm(j.item);
+        if (item.layer === SEC.id) {
+          Object.assign(item, { floor, x, y }); await saveSec(); render(); showForm(item);
+        } else {
+          const j = await send({ action: "move", id: item.id, floor, x, y });
+          const i = state.data.items.findIndex((v) => v.id === item.id);
+          state.data.items[i] = j.item;
+          render(); showForm(j.item);
+        }
       } catch (e) { banner("Couldn't move it: " + e.message); }
       return;
     }
@@ -270,10 +361,38 @@
       lab.appendChild(document.createTextNode(" " + L.name + " (" + items.length + ")"));
       leg.appendChild(lab);
     });
+    {
+      const lab = el("div", { class: "hm-layer hm-sec" });
+      if (state.sec.unlocked) {
+        const cb = el("input", { type: "checkbox", id: "hm-sec-cb" });
+        cb.checked = state.on.has(SEC.id);
+        cb.onchange = () => { cb.checked ? state.on.add(SEC.id) : state.on.delete(SEC.id); render(); };
+        const l2 = el("label", { for: "hm-sec-cb", class: "hm-layer" });
+        l2.appendChild(cb); l2.appendChild(el("span", { class: "hm-dot", style: "background:" + SEC.color }));
+        l2.appendChild(document.createTextNode(" " + SEC.name + " (" + state.sec.items.length + ", unlocked)"));
+        lab.appendChild(l2);
+        const lock = el("button", { type: "button", class: "hm-btn" }, "Lock");
+        lock.onclick = () => { Object.assign(state.sec, { unlocked: false, key: null, items: [] }); state.on.delete(SEC.id); panel().hidden = true; render(); };
+        lab.appendChild(lock);
+      } else if (state.sec.exists) {
+        lab.appendChild(el("span", { class: "hm-dot", style: "background:" + SEC.color }));
+        lab.appendChild(document.createTextNode(" " + SEC.name + " (locked) "));
+        const u = el("button", { type: "button", class: "hm-btn" }, "Unlock");
+        u.onclick = showUnlock;
+        lab.appendChild(u);
+      } else if (state.editing) {
+        lab.appendChild(el("span", { class: "hm-dot", style: "background:" + SEC.color }));
+        lab.appendChild(document.createTextNode(" " + SEC.name + " (not set up) "));
+        const u = el("button", { type: "button", class: "hm-btn" }, "Set up");
+        u.onclick = showSetup;
+        lab.appendChild(u);
+      }
+      if (lab.childNodes.length) leg.appendChild(lab);
+    }
     // unplaced list
     const un = document.getElementById("hm-unplaced");
     un.innerHTML = "";
-    const unplaced = d.items.filter((i) => state.on.has(i.layer) && (i.x == null || !i.floor));
+    const unplaced = allItems().filter((i) => state.on.has(i.layer) && (i.x == null || !i.floor));
     if (unplaced.length) {
       un.appendChild(el("p", { class: "hm-sub" }, "Not on the map yet (spot not recorded):"));
       const ul = el("ul");
@@ -296,7 +415,7 @@
       const svg = svgEl("svg", { viewBox: "0 0 1200 1060", role: "img", "aria-label": f.name + " plan" });
       svg.appendChild(svgEl("image", { href: f.svg + "?v=" + ver, x: 0, y: 0, width: 1200, height: 1060 }));
       const g = svgEl("g", { transform: "translate(10,90)" });
-      d.items.filter((i) => i.floor === f.id && i.x != null && state.on.has(i.layer)).forEach((i) => {
+      allItems().filter((i) => i.floor === f.id && i.x != null && state.on.has(i.layer)).forEach((i) => {
         const L = layer(i.layer);
         const m = svgEl("g", { class: "hm-marker", tabindex: "0", role: "button", "aria-label": i.name });
         m.appendChild(svgEl("circle", { cx: i.x, cy: i.y, r: 26, fill: L.color, opacity: 0.25 }));
@@ -325,6 +444,10 @@
     .then((r) => r.json())
     .then((d) => {
       state.data = d;
+      fetch("data/security.enc.json?t=" + Date.now(), { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((b) => { if (b && b.ct) { state.sec.exists = true; state.sec.blob = b; render(); } })
+        .catch(() => {});
       fetch("data/rooms.json?v=" + ver).then((r) => r.json()).then((rm) => { state.rooms = rm; }).catch(() => {});
       const saved = loadOn();
       state.on = saved || new Set(d.layers.map((l) => l.id));

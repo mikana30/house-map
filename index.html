@@ -67,6 +67,7 @@
   .hm-ask label { font-weight:700; font-size:14px; }
   .hm-ask textarea { display:block; width:100%; font:inherit; font-size:16px; padding:6px 8px; margin-top:4px; border:1px solid #aaa; border-radius:6px; }
   .hm-note { background:#fff6dc; border-left:4px solid #e0a800; padding:6px 10px; font-size:14px; }
+  .hm-sec { gap:8px; flex-wrap:wrap; }
 </style>
 </head>
 <body>
@@ -94,7 +95,7 @@
 <section id="floorplans">
   <h2>Floor plans</h2>
   <p>Outside walls traced to scale from the Greene County auditor's building sketch; rooms from the owner's walk-through, the robot vacuum's map and listing photos. North is up; the front of the house (road side) faces south. Room positions are approximate and still being corrected. Tick a layer to light those things up on the plans; tap a marker for its photo and notes.</p>
-  <div id="hm-app" data-v="202611220038">
+  <div id="hm-app" data-v="202611220045">
     <div class="hm-controls"><div id="hm-edit"></div><div id="hm-legend"></div><div id="hm-unplaced"></div></div>
     <div id="hm-floors"><p>Loading the plans…</p></div>
     <div id="hm-detail" hidden tabindex="-1"></div>
@@ -188,6 +189,7 @@
 <section id="changes">
   <h2>Change log</h2>
   <ul>
+    <li><strong>2026-11-22</strong>: Locked security layer: encrypted in the browser; the password is inside the security panel door.</li>
     <li><strong>2026-11-22</strong>: Ask Claude box in edit mode: describe what you tapped and it fills in the entry from the owner's notes.</li>
     <li><strong>2026-11-22</strong>: Edit mode: tap a spot to add an item, tap a marker to edit, move or delete (owner devices only).</li>
     <li><strong>2026-11-22</strong>: Interactive plans: layer legend, clickable markers with photo and notes (data in data/items.json).</li>
@@ -206,6 +208,6 @@
 <footer>
   Things that move with the owner (plugs, routers, sensors, test equipment) are deliberately not listed. No passwords or network details are kept on this page.
 </footer>
-<script src="assets/map.js?v=202611220038"></script>
+<script src="assets/map.js?v=202611220045"></script>
 </body>
 </html>
