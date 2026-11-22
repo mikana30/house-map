@@ -2,25 +2,28 @@
 # from the robot-vacuum map (reach, door gaps) + listing photos. Sketch px, 15.27 px/ft.
 exec(open('build.py').read().split('def poly')[0])
 R={
- "office":[(386,532),(553,532),(553,685),(508,685),(462,730),(386,730),(340,685),(340,625),(386,578)],
+ "office":[(386,532),(480,532),(480,575),(553,575),(553,685),(508,685),(462,730),(386,730),(340,685),(340,625),(386,578)],
  "hall":[(553,441),(615,441),(615,330),(646,330),(646,685),(553,685)],
  "front":[(646,487),(813,487),(813,685),(646,685)],
- "sitting":[(646,330),(813,330),(813,487),(646,487)],
+ "walkway":[(646,330),(813,330),(813,420),(646,420)],
+ "pantry":[(646,420),(813,420),(813,487),(646,487)],
+ "closet":[(480,532),(553,532),(553,575),(480,575)],
  "kitchen":[(615,136),(838,136),(838,290),(813,290),(813,330),(615,330)],
  "nook":[(615,74),(660,30),(767,30),(813,74),(813,136),(615,136)],
  "family":[(386,136),(615,136),(615,441),(553,441),(553,400),(386,400)],
- "stairs":[(386,400),(553,400),(553,532),(386,532)],
+ "up":[(386,400),(553,400),(553,466),(386,466)],
+ "down":[(386,466),(553,466),(553,532),(386,532)],
  "laundry":[(838,136),(945,136),(945,290),(838,290)],
  "backhall":[(813,290),(945,290),(945,349),(935,349),(935,437),(813,437)],
  "bath":[(813,437),(935,437),(935,532),(813,532)],
  "bedroom":[(945,136),(996,136),(1148,136),(1148,380),(1057,380),(1057,349),(945,349)],
 }
-FILL={"office":"#dcebf5","hall":"#f4f4f4","front":"#efe6f7","sitting":"#efe6f7","kitchen":"#fbf0dc","nook":"#fbf0dc",
- "family":"#e8f3e6","stairs":"#d9d9d9","laundry":"#f7ead0","backhall":"#f4f4f4","bath":"#dfe8f7","bedroom":"#f7e1e3"}
-LBL={"office":("OFFICE","turret, bay windows",458,640),"hall":("FOYER","front hall",600,600),
- "front":("FRONT ROOM","chandelier (listed as dining)",730,600),"sitting":("SITTING ROOM","",730,410),
+FILL={"office":"#dcebf5","hall":"#f4f4f4","front":"#efe6f7","walkway":"#fbf0dc","pantry":"#eadfc8","closet":"#eadfc8","kitchen":"#fbf0dc","nook":"#fbf0dc",
+ "family":"#e8f3e6","up":"#d9d9d9","down":"#d9d9d9","laundry":"#f7ead0","backhall":"#f4f4f4","bath":"#dfe8f7","bedroom":"#f7e1e3"}
+LBL={"office":("OFFICE","turret, bay windows",458,640),"hall":("FOYER","open to 2nd floor",600,640),
+ "front":("SITTING ROOM","chandelier",730,595),"walkway":("WALKWAY","island ↔ pantry",730,372),"pantry":("PANTRY","",730,460),"closet":("COAT","",516,560),
  "kitchen":("KITCHEN","island",715,240),"nook":("BREAKFAST NOOK","bay",714,98),
- "family":("FAMILY ROOM","vaulted 2 stories",500,250),"stairs":("STAIRS","up · closets",470,470),
+ "family":("FAMILY ROOM","vaulted 2 stories",500,250),"up":("STAIRS UP","open to family room",470,432),"down":("STAIRS DOWN","basement · door",470,502),
  "laundry":("LAUNDRY","",891,215),"backhall":("BACK HALL","",874,370),"bath":("BATH","shower",874,488),
  "bedroom":("BEDROOM","",1050,250)}
 def poly(p,fill,stroke="#555",sw=2,dash=""):
@@ -36,11 +39,16 @@ def gap(x1,y1,x2,y2,kind="open"):  # erase wall segment and mark the opening
 b=poly(porch,"#dfeee0","#6a9a6c",3)+poly(gar,"#e9e3d6","#222",4)
 for p in [core,fam,bump]: b+=poly(p,"#222","#222",14)   # exterior wall (inner half gets covered)
 for k,p in R.items(): b+=poly(p,FILL[k],"#777",2)
-b+=poly(R["stairs"],"url(#st)","#555",2)
+b+=poly(R["up"],"url(#st)","#555",2)+poly(R["down"],"url(#st)","#555",2)
 # openings (no wall) and doors (red)
 b+=gap(553,441,615,441)            # hall opens into family room
 b+=gap(646,545,646,670)            # wide opening foyer -> front room
-b+=gap(672,487,790,487)            # wide opening front room -> sitting room (the wall in between)
+b+=gap(690,420,770,420,"door")     # pantry double doors face the walkway
+b+=gap(650,330,809,330)            # walkway open to kitchen
+b+=gap(646,334,646,416)            # walkway open to hall
+b+=gap(392,400,549,400)            # up stairs open to family room
+b+=gap(553,476,553,522,"door")     # basement stair door
+b+=gap(553,538,553,570,"door")     # coat closet
 b+=gap(618,330,644,330)            # walkway to kitchen
 b+=gap(615,140,615,326)            # kitchen open to family room
 b+=gap(619,136,809,136)            # kitchen open to nook
@@ -61,7 +69,7 @@ defs='<defs><pattern id="st" width="12" height="12" patternUnits="userSpaceOnUse
 W,H=1200,1060; sb=10*15.27
 leg=('<g transform="translate(40,960)">'+'<line x1="0" y1="0" x2="40" y2="0" stroke="#c0392b" stroke-width="4"/>'+T(110,6,"door",15,"normal")
      +'<rect x="190" y="-8" width="40" height="16" fill="#fff" stroke="#555"/>'+T(300,6,"open, no wall",15,"normal")
-     +'<rect x="400" y="-8" width="40" height="16" fill="url(#st)" stroke="#555"/>'+T(510,6,"vacuum can\'t reach",15,"normal")+'</g>')
+     +'<rect x="400" y="-8" width="40" height="16" fill="url(#st)" stroke="#555"/>'+T(510,6,"stairs",15,"normal")+'</g>')
 svg=(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" font-family="DejaVu Sans, Arial, sans-serif">{defs}'
      f'<rect width="{W}" height="{H}" fill="#fff"/>'+T(W/2,42,"MAIN FLOOR: ROOMS",30)
      +T(W/2,68,"Outline from county sketch · rooms from robot-vacuum map + listing photos · positions approximate",14,"normal","#555")
