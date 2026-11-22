@@ -143,6 +143,17 @@
       "photo": null,
       "notes": "Electrical sub-panel in the basement theater. This is a separate panel from the main breaker panel. Brand, model, breaker sizes and the circuits it feeds: not recorded yet.",
       "directory": []
+    },
+    {
+      "id": "upstairs-electrical-panel-4b98",
+      "layer": "utility",
+      "name": "Upstairs electrical panel",
+      "floor": "second",
+      "x": 898,
+      "y": 537,
+      "photo": null,
+      "notes": "Electrical panel for the upstairs, on the second floor. It is separate from the main breaker panel and the sub-panel in the basement theater. Room: not recorded yet. Brand, model, breaker sizes and the circuits it feeds: not recorded yet.",
+      "directory": []
     }
   ]
 }
