@@ -50,6 +50,19 @@
   .hm-close { position:absolute; top:8px; right:10px; font-size:28px; line-height:1; background:none; border:0; cursor:pointer; padding:4px 8px; }
   .hm-dir { font-size:14px; }
   @media print { .hm-controls, #hm-detail { display:none !important; } }
+
+  #hm-edit { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:6px; }
+  #hm-edit:empty { display:none; }
+  .hm-banner { background:#fff6dc; border:1px solid #e0a800; border-radius:6px; padding:4px 10px; font-size:15px; }
+  .hm-btn { font:inherit; font-size:15px; font-weight:600; padding:7px 14px; border-radius:6px; border:1px solid #888; background:#fff; cursor:pointer; min-height:36px; }
+  .hm-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .hm-danger { color:#a3201b; border-color:#a3201b; }
+  .hm-editing svg { cursor:crosshair; outline:3px solid #e0a800; }
+  .hm-form label { display:block; font-weight:600; font-size:14px; margin:8px 0 2px; }
+  .hm-form input[type=text], .hm-form select, .hm-form textarea { display:block; width:100%; font:inherit; font-size:16px; padding:6px 8px; margin-top:3px; border:1px solid #aaa; border-radius:6px; }
+  .hm-form input[type=file] { display:block; margin-top:4px; font-size:15px; }
+  .hm-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .hm-msg { min-height:1.2em; font-size:14px; color:var(--muted); }
 </style>
 </head>
 <body>
@@ -77,8 +90,8 @@
 <section id="floorplans">
   <h2>Floor plans</h2>
   <p>Outside walls traced to scale from the Greene County auditor's building sketch; rooms from the owner's walk-through, the robot vacuum's map and listing photos. North is up; the front of the house (road side) faces south. Room positions are approximate and still being corrected. Tick a layer to light those things up on the plans; tap a marker for its photo and notes.</p>
-  <div id="hm-app" data-v="202611220018">
-    <div class="hm-controls"><div id="hm-legend"></div><div id="hm-unplaced"></div></div>
+  <div id="hm-app" data-v="202611220029">
+    <div class="hm-controls"><div id="hm-edit"></div><div id="hm-legend"></div><div id="hm-unplaced"></div></div>
     <div id="hm-floors"><p>Loading the plans…</p></div>
     <div id="hm-detail" hidden tabindex="-1"></div>
   </div>
@@ -171,6 +184,7 @@
 <section id="changes">
   <h2>Change log</h2>
   <ul>
+    <li><strong>2026-11-22</strong>: Edit mode: tap a spot to add an item, tap a marker to edit, move or delete (owner devices only).</li>
     <li><strong>2026-11-22</strong>: Interactive plans: layer legend, clickable markers with photo and notes (data in data/items.json).</li>
     <li><strong>2026-11-22</strong>: Floor plans trimmed to one image per floor (main, second, basement). Basement bath moved under the main-floor bath.</li>
     <li><strong>2026-11-22</strong>: Basement room plan added from walk-through.</li>
@@ -187,6 +201,6 @@
 <footer>
   Things that move with the owner (plugs, routers, sensors, test equipment) are deliberately not listed. No passwords or network details are kept on this page.
 </footer>
-<script src="assets/map.js?v=202611220018"></script>
+<script src="assets/map.js?v=202611220029"></script>
 </body>
 </html>
