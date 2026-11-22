@@ -6,7 +6,8 @@ R={
  "hall":[(553,441),(615,441),(615,330),(646,330),(646,685),(553,685)],
  "front":[(646,487),(813,487),(813,685),(646,685)],
  "walkway":[(646,330),(813,330),(813,420),(646,420)],
- "pantry":[(646,420),(813,420),(813,487),(646,487)],
+ "pantry":[(646,420),(765,420),(765,487),(646,487)],
+ "passage":[(765,420),(813,420),(813,487),(765,487)],
  "closet":[(480,532),(553,532),(553,575),(480,575)],
  "kitchen":[(615,136),(838,136),(838,290),(813,290),(813,330),(615,330)],
  "nook":[(615,74),(660,30),(767,30),(813,74),(813,136),(615,136)],
@@ -18,10 +19,10 @@ R={
  "bath":[(813,437),(935,437),(935,532),(813,532)],
  "bedroom":[(945,136),(996,136),(1148,136),(1148,380),(1057,380),(1057,349),(945,349)],
 }
-FILL={"office":"#dcebf5","hall":"#f4f4f4","front":"#efe6f7","walkway":"#fbf0dc","pantry":"#eadfc8","closet":"#eadfc8","kitchen":"#fbf0dc","nook":"#fbf0dc",
+FILL={"office":"#dcebf5","hall":"#f4f4f4","front":"#efe6f7","walkway":"#fbf0dc","pantry":"#eadfc8","passage":"#fbf0dc","closet":"#eadfc8","kitchen":"#fbf0dc","nook":"#fbf0dc",
  "family":"#e8f3e6","up":"#d9d9d9","down":"#d9d9d9","laundry":"#f7ead0","backhall":"#f4f4f4","bath":"#dfe8f7","bedroom":"#f7e1e3"}
 LBL={"office":("OFFICE","turret, bay windows",458,640),"hall":("FOYER","open to 2nd floor",600,640),
- "front":("SITTING ROOM","chandelier",730,595),"walkway":("WALKWAY","island ↔ pantry",730,372),"pantry":("PANTRY","",730,460),"closet":("COAT","",516,560),
+ "front":("SITTING ROOM","chandelier",730,595),"walkway":("WALKWAY","island ↔ pantry",730,372),"pantry":("PANTRY","",706,460),"passage":("","",0,0),"closet":("COAT","",516,560),
  "kitchen":("KITCHEN","island",715,240),"nook":("BREAKFAST NOOK","bay",714,98),
  "family":("FAMILY ROOM","vaulted 2 stories",500,250),"up":("STAIRS UP","open to family room",470,432),"down":("STAIRS DOWN","basement · door",470,502),
  "laundry":("LAUNDRY","",891,215),"backhall":("BACK HALL","",874,370),"bath":("BATH","shower",874,488),
@@ -43,7 +44,9 @@ b+=poly(R["up"],"url(#st)","#555",2)+poly(R["down"],"url(#st)","#555",2)
 # openings (no wall) and doors (red)
 b+=gap(553,441,615,441)            # hall opens into family room
 b+=gap(646,545,646,670)            # wide opening foyer -> front room
-b+=gap(690,420,770,420,"door")     # pantry double doors face the walkway
+b+=gap(668,420,745,420,"door")     # pantry double doors face the walkway
+b+=gap(768,420,810,420)            # passage open to the walkway
+b+=gap(768,487,810,487)            # doorway: kitchen walkway -> sitting room (east of the pantry)
 b+=gap(650,330,809,330)            # walkway open to kitchen
 b+=gap(646,334,646,416)            # walkway open to hall
 b+=gap(392,400,549,400)            # up stairs open to family room
