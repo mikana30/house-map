@@ -154,6 +154,17 @@
       "photo": null,
       "notes": "Electrical panel for the upstairs, on the second floor. It is separate from the main breaker panel and the sub-panel in the basement theater. Room: not recorded yet. Brand, model, breaker sizes and the circuits it feeds: not recorded yet.",
       "directory": []
+    },
+    {
+      "id": "internet-modem-altafiber-168b",
+      "layer": "utility",
+      "name": "Internet modem (Altafiber)",
+      "floor": "basement",
+      "x": 623,
+      "y": 444,
+      "photo": null,
+      "notes": "Altafiber fiber internet modem, in the basement. Fiber service (Fioptics) was installed on September 17, 2026, and replaced Spectrum cable. Modem brand and model: not recorded yet. The home router plugs into this modem.",
+      "directory": []
     }
   ]
 }
