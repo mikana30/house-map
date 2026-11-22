@@ -132,17 +132,6 @@
       "photo": null,
       "notes": "SunTouch FloorStat 500600-120 (original, display dead). Planned replacement: Shelly 1PM Gen4 UL. Room not recorded yet.",
       "directory": []
-    },
-    {
-      "id": "test-item-delete-me-4518",
-      "layer": "utility",
-      "name": "TEST ITEM delete me",
-      "floor": "main",
-      "x": 699,
-      "y": 600,
-      "photo": null,
-      "notes": "edit-mode test",
-      "directory": []
     }
   ]
 }
