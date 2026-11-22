@@ -34,6 +34,23 @@
   function saveOn() {
     try { localStorage.setItem("hm-layers", JSON.stringify([...state.on])); } catch (e) {}
   }
+  function roomAt(floor, x, y) {
+    const rooms = (state.rooms || {})[floor] || [];
+    for (const r of rooms) {
+      const p = r.poly; let inside = false;
+      for (let i = 0, j = p.length - 1; i < p.length; j = i++) {
+        const [x1, y1] = p[i], [x2, y2] = p[j];
+        if ((y1 > y) !== (y2 > y) && x < (x2 - x1) * (y - y1) / (y2 - y1) + x1) inside = !inside;
+      }
+      if (inside) return r.name;
+    }
+    return null;
+  }
+  function where(floor, x, y) {
+    if (!floor) return "No spot on the map yet";
+    const r = x != null ? roomAt(floor, x, y) : null;
+    return floorName(floor) + (r ? " · " + r : "");
+  }
   function layer(id) { return state.data.layers.find((l) => l.id === id) || { name: id, color: "#555" }; }
   function floorName(id) { const f = FLOORS.find((x) => x.id === id); return f ? f.name : "Location not recorded yet"; }
   function panel() { return document.getElementById("hm-detail"); }
@@ -106,20 +123,47 @@
   }
 
   // Add / edit form. item = existing item, or null for a new one (uses state.draft for the spot).
-  function showForm(item) {
+  // opts.prefill = {name, layer, notes} from Ask Claude; opts.placeAt = {floor,x,y} to place an existing item.
+  function showForm(item, opts) {
+    opts = opts || {};
     const p = panel();
     const isNew = !item;
-    const spot = isNew ? state.draft : item;
-    panelHeader(p, isNew ? "Add to the map" : "Edit", "#555", isNew ? "New item" : item.name);
-    p.appendChild(el("p", { class: "hm-where" }, spot && spot.floor ? floorName(spot.floor) + " · spot picked" : "No spot on the map yet"));
+    const spot = opts.placeAt || (isNew ? state.draft : item);
+    panelHeader(p, isNew ? "Add to the map" : (opts.placeAt ? "Place on the map" : "Edit"), "#555", isNew ? "New item" : item.name);
+    p.appendChild(el("p", { class: "hm-where" }, spot ? where(spot.floor, spot.x, spot.y) : "No spot on the map yet"));
+    if (isNew) {
+      const ask = el("div", { class: "hm-ask" });
+      ask.appendChild(el("label", { for: "hm-ask-text" }, "Ask Claude"));
+      const q = el("textarea", { id: "hm-ask-text", rows: "2", maxlength: "400", placeholder: "e.g. this is the main floor thermostat, fill in what you know" });
+      const go = el("button", { type: "button", class: "hm-btn hm-primary" }, "Fill it in");
+      const am = el("p", { class: "hm-msg", role: "status" });
+      go.onclick = async () => {
+        if (!q.value.trim()) { am.textContent = "Say what it is first."; return; }
+        go.disabled = true; am.textContent = "Claude is looking it up in your notes… (usually 15–40 seconds)";
+        try {
+          const j = await send({ action: "ask", floor: spot.floor, x: spot.x, y: spot.y, text: q.value });
+          const pr = j.proposal;
+          const match = pr.match_id && state.data.items.find((i) => i.id === pr.match_id);
+          if (match) showForm(match, { prefill: pr, placeAt: spot, note: "Claude matched this to an existing entry. Check it, then Save." });
+          else showForm(null, { prefill: pr, note: "Claude filled this in from your notes. Check it, then Add." });
+        } catch (e) { am.textContent = e.message; go.disabled = false; }
+      };
+      ask.appendChild(q);
+      const r0 = el("div", { class: "hm-row" }); r0.appendChild(go); ask.appendChild(r0);
+      ask.appendChild(am);
+      p.appendChild(ask);
+      p.appendChild(el("p", { class: "hm-sub" }, "Or fill it in yourself:"));
+    }
+    if (opts.note) p.appendChild(el("p", { class: "hm-note" }, opts.note));
+    const pf = opts.prefill || {};
     const f = el("form", { class: "hm-form" });
     const name = el("input", { type: "text", required: "", maxlength: "80", placeholder: "e.g. Main breaker panel" });
-    name.value = item ? item.name : "";
+    name.value = pf.name || (item ? item.name : "");
     const sel = el("select");
     state.data.layers.forEach((L) => { const o = el("option", { value: L.id }, L.name); sel.appendChild(o); });
-    sel.value = item ? item.layer : (state.data.layers[0] || {}).id;
+    sel.value = pf.layer || (item ? item.layer : (state.data.layers[0] || {}).id);
     const notes = el("textarea", { rows: "4", maxlength: "2000", placeholder: "Brand, model, what it controls, anything useful" });
-    notes.value = item ? item.notes || "" : "";
+    notes.value = pf.notes != null ? pf.notes : (item ? item.notes || "" : "");
     const photo = el("input", { type: "file", accept: "image/*" });
     const lab = (t, inp) => { const l = el("label", {}, t); l.appendChild(inp); return l; };
     f.appendChild(lab("Name", name));
@@ -128,9 +172,9 @@
     f.appendChild(lab(item && item.photo ? "Replace photo" : "Photo (optional)", photo));
     const msg = el("p", { class: "hm-msg", role: "status" });
     const row = el("div", { class: "hm-row" });
-    const saveB = el("button", { type: "submit", class: "hm-btn hm-primary" }, isNew ? "Add" : "Save");
+    const saveB = el("button", { type: "submit", class: "hm-btn hm-primary" }, isNew ? "Add" : (opts.placeAt ? "Save here" : "Save"));
     row.appendChild(saveB);
-    if (!isNew) {
+    if (!isNew && !opts.placeAt) {
       const mv = el("button", { type: "button", class: "hm-btn" }, item.x == null ? "Place on map" : "Move");
       mv.onclick = () => { state.pending = { kind: "move", item }; p.hidden = true; render(); };
       row.appendChild(mv);
@@ -154,7 +198,7 @@
       saveB.disabled = true; msg.textContent = "Saving…";
       try {
         const body = { action: isNew ? "add" : "update", id: item && item.id, name: name.value, layer: sel.value, notes: notes.value };
-        if (isNew && spot) Object.assign(body, { floor: spot.floor, x: spot.x, y: spot.y });
+        if ((isNew || opts.placeAt) && spot) Object.assign(body, { floor: spot.floor, x: spot.x, y: spot.y });
         let preview = null;
         if (photo.files && photo.files[0]) { preview = await shrink(photo.files[0]); body.photo_b64 = preview; }
         const j = await send(body);
@@ -171,7 +215,8 @@
     };
     p.appendChild(f);
     p.hidden = false;
-    name.focus();
+    const qa = p.querySelector("#hm-ask-text");
+    (qa || name).focus();
   }
 
   async function planTap(floor, x, y) {
@@ -280,6 +325,7 @@
     .then((r) => r.json())
     .then((d) => {
       state.data = d;
+      fetch("data/rooms.json?v=" + ver).then((r) => r.json()).then((rm) => { state.rooms = rm; }).catch(() => {});
       const saved = loadOn();
       state.on = saved || new Set(d.layers.map((l) => l.id));
       render();
