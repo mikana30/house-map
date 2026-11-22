@@ -163,9 +163,10 @@
         if (i >= 0) state.data.items[i] = j.item; else state.data.items.push(j.item);
         state.on.add(j.item.layer);
         state.draft = null; state.pending = null;
-        msg.textContent = "Saved. It's on the public page within a minute or two.";
         render();
-        setTimeout(() => { if (!panel().hidden) showForm(j.item); }, 50);
+        showForm(j.item);
+        const m2 = panel().querySelector(".hm-msg");
+        if (m2) m2.textContent = "Saved. It's on the public page within a minute or two.";
       } catch (e) { msg.textContent = e.message; saveB.disabled = false; }
     };
     p.appendChild(f);
