@@ -82,3 +82,8 @@ svg=(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}"
      +T(W/2,H-14,"FRONT (road side, south)",18,"bold","#555")+'</svg>')
 open('main-rooms.svg','w').write(svg)
 open('/tmp/claude-1000/-home-mike/932c57ac-5002-4f9b-acec-41c9464b732f/scratchpad/vac/mr.html','w').write('<html><body style="margin:0">'+svg+'</body></html>')
+
+
+if __name__ == "__main__":   # every redraw is checked against the robot-vacuum map
+    import subprocess, sys
+    sys.exit(subprocess.run([sys.executable, "check_plan.py"]).returncode)
