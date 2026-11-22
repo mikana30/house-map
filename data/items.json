@@ -4,22 +4,22 @@
     {
       "id": "utility",
       "name": "Utility panels & equipment",
-      "color": "#d35400"
+      "color": "#E69F00"
     },
     {
       "id": "water",
       "name": "Water shutoffs",
-      "color": "#1f78b4"
+      "color": "#0072B2"
     },
     {
       "id": "climate",
       "name": "Heating & cooling",
-      "color": "#c0392b"
+      "color": "#009E73"
     },
     {
       "id": "smart",
       "name": "Smart switches & devices",
-      "color": "#7a4fb5"
+      "color": "#CC79A7"
     }
   ],
   "items": [
