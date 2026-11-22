@@ -11,23 +11,24 @@ R={
  "bedB":[(646,500),(813,500),(813,685),(646,685)],
  "bath":[(615,250),(700,250),(700,440),(615,440)],
  "linen":[(700,395),(745,395),(745,440),(700,440)],
- "pbath":[(615,74),(660,30),(767,30),(813,74),(813,180),(770,250),(615,250)],
- "primary":[(813,180),(813,136),(996,136),(996,349),(935,349),(935,440),(745,440),(745,395),(700,395),(700,250),(770,250)],
+ "pbath":[(615,74),(660,30),(767,30),(813,74),(813,136),(836,136),(836,160),(760,236),(760,250),(615,250)],
+ "primary":[(836,136),(996,136),(996,349),(935,349),(935,440),(745,440),(745,395),(700,395),(700,250),(760,250),(760,236),(836,160)],
+ "wic":[(835,340),(875,300),(935,300),(935,440),(835,440)],
  "lhall":[(840,440),(935,440),(935,532),(813,532),(813,500),(840,500)],
  "attic":[(935,349),(1057,349),(1057,380),(1148,380),(1148,486),(935,486)],
  "office":[(935,486),(1057,486),(1057,852),(935,852)],
- "hvac":[(1005,494),(1057,494),(1057,560),(1005,560)],
+ "hvac":[(935,535),(985,535),(985,595),(935,595)],
 }
 FILL={"openfam":"#ffffff","stairs":"#d9d9d9","hall":"#f4f4f4","openfoyer":"#ffffff","bedA":"#f7e1e3","bedB":"#f7e1e3",
  "bath":"#dfe8f7","linen":"#eadfc8","pbath":"#dfe8f7","primary":"#efe6f7","lhall":"#f4f4f4","attic":"#ffffff",
- "office":"#dcebf5","hvac":"#eadfc8"}
-LBL={"openfam":("OPEN TO FAMILY ROOM","below",500,270),"stairs":("STAIRS","U-turn at landing",443,470),
+ "office":"#dcebf5","hvac":"#eadfc8","wic":"#eadfc8"}
+LBL={"openfam":("OPEN TO FAMILY ROOM","below",500,270),"stairs":("STAIRS","U-turn",462,440),
  "hall":("HALL","rail overlooks family room",700,476),"openfoyer":("OPEN TO","foyer below",600,610),
  "bedA":("BEDROOM","turret bay",458,640),"bedB":("BEDROOM","",730,600),
  "bath":("BATH","",657,300),"linen":("LINEN","",722,422),
- "pbath":("PRIMARY","bath",722,148),"primary":("PRIMARY BEDROOM","",870,300),
+ "pbath":("PRIMARY","bath",722,148),"primary":("PRIMARY BEDROOM","",880,225),"wic":("WALK-IN","closet",890,390),
  "lhall":("","",0,0),"attic":("UNFINISHED ATTIC","storage, over garage",1040,430),
- "office":("OFFICE","listed as bedroom",996,700),"hvac":("HVAC","",1031,532)}
+ "office":("OFFICE","listed as bedroom",996,700),"hvac":("HVAC","",960,570)}
 b=poly(gar,"none","#bbb",3,"10 8")
 b+=poly(bump,"none","#bbb",3,"10 8")+T(1072,250,"roof (one-story below)",12,"normal","#999")
 for p in [core,fam]: b+=poly(p,"#222","#222",14)
@@ -37,8 +38,10 @@ for k,p in R.items():
     dash="8 6" if k in("openfam","openfoyer") else ""
     b+=poly(p,FILL[k],"#777",2,dash)
 b+=poly(R["stairs"],"url(#st)","#555",2)
+b+='<rect x="386" y="400" width="34" height="132" fill="#e4e4e4" stroke="#555" stroke-width="2"/>'
+b+='<line x1="420" y1="466" x2="500" y2="466" stroke="#555" stroke-width="2"/>'
 # primary-bath fixtures (small, approximate)
-fx=[((640,45,790,118),"jacuzzi tub"),((622,128,676,192),"shower"),((768,125,808,170),"vanity"),((620,200,668,246),"toilet"),((672,215,722,246),"linen")]
+fx=[((640,45,790,118),"jacuzzi tub"),((622,128,676,192),"shower"),((758,124,810,166),"vanity"),((620,200,668,246),"toilet"),((672,215,718,246),"linen")]
 for (x1,y1,x2,y2),n in fx:
     b+=f'<rect x="{x1}" y="{y1}" width="{x2-x1}" height="{y2-y1}" fill="#fff" stroke="#8aa" stroke-width="1.5" rx="4"/>'+T((x1+x2)/2,(y1+y2)/2+4,n,11,"normal","#456")
 # hall-bath split: vanity (south) | door | toilet + tub (north)
@@ -53,10 +56,13 @@ b+=gap(660,500,700,500,"door")        # bedroom across from the bath
 b+=gap(512,532,548,532,"door")        # bedroom at top of stairs
 b+=gap(840,446,840,494,"door")        # doorway to little hall
 b+=gap(935,490,935,528)               # open doorway (no door) into the office over the garage
-b+=gap(1005,505,1005,550,"door")      # HVAC closet
+b+=gap(985,545,985,585,"door")        # HVAC closet, west wall south of the entry
 b+=gap(955,486,995,486,"door")        # small attic door
-b+=gap(784,222,800,197,"door")        # angled wall doorway into primary bath
-b+=poly(deck,"#dbe6f5","#5a7aa8",3)+T(889,112,"balcony",13,"normal","#3a5a88")
+b+=gap(786,210,810,186,"door")        # angled-corner doorway into primary bath
+b+=gap(860,136,925,136,"door")        # glass double doors to the balcony
+b+=gap(842,333,868,307,"door")        # walk-in closet door on its angled wall
+b+=T(996,838,"gable window",12,"normal","#555")
+b+=poly(deck,"#dbe6f5","#5a7aa8",3)+T(889,112,"balcony",13,"normal","#3a5a88")+gap(860,136,925,136,"door")
 for k,(a,s,x,y) in LBL.items():
     if not a: continue
     b+=T(x,y,a,16)
