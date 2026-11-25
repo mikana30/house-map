@@ -149,11 +149,77 @@
       "layer": "utility",
       "name": "Upstairs electrical panel",
       "floor": "second",
-      "x": 898,
-      "y": 537,
+      "x": 890,
+      "y": 524,
       "photo": null,
-      "notes": "Electrical panel for the upstairs, on the second floor. It is separate from the main breaker panel and the sub-panel in the basement theater. Room: not recorded yet. Brand, model, breaker sizes and the circuits it feeds: not recorded yet.",
-      "directory": []
+      "notes": "Electrical panel for the upstairs, separate from the main breaker panel and the basement sub-panel. On the south (right-hand) wall of the short entry hall that leads from the upstairs hall into the office over the garage. Square D Homeline load center, 13 breakers in spaces 1-13 (14-24 empty). Directory below is typed from the handwritten label on the door (photo, November 2026); amps are read off the breaker handles in that photo. Breakers 10 and 12 are installed but have no label.",
+      "directory": [
+        {
+          "breaker": 1,
+          "amps": 15,
+          "label": "Smokes"
+        },
+        {
+          "breaker": 2,
+          "amps": 20,
+          "label": "Bath GFI"
+        },
+        {
+          "breaker": 3,
+          "amps": 15,
+          "label": "Master Bath Heater"
+        },
+        {
+          "breaker": 4,
+          "amps": 20,
+          "label": "Master Bath GFI"
+        },
+        {
+          "breaker": 5,
+          "amps": 15,
+          "label": "Bonus Room"
+        },
+        {
+          "breaker": 6,
+          "amps": 20,
+          "label": "Furnace"
+        },
+        {
+          "breaker": 7,
+          "amps": 20,
+          "label": "Hot Tub"
+        },
+        {
+          "breaker": 8,
+          "amps": 15,
+          "label": "Master Bed"
+        },
+        {
+          "breaker": 9,
+          "amps": 20,
+          "label": "Floor Heat Master Bath"
+        },
+        {
+          "breaker": 10,
+          "amps": 15,
+          "label": "(no label)"
+        },
+        {
+          "breaker": 11,
+          "amps": 20,
+          "label": "Floor Heat Hall Bath"
+        },
+        {
+          "breaker": 12,
+          "amps": 15,
+          "label": "(no label)"
+        },
+        {
+          "breaker": 13,
+          "amps": 15,
+          "label": "Hall / M Bath Lights"
+        }
+      ]
     },
     {
       "id": "internet-modem-altafiber-168b",
